@@ -3,9 +3,20 @@ import { extendTheme, styled } from '@mui/material/styles';
 //import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { PageContainer } from '@toolpad/core/PageContainer';
-import Grid from '@mui/material/Grid2';
+import { Outlet } from 'react-router-dom';
+// import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+// import { PageContainer } from '@toolpad/core/PageContainer';
+// import Grid from '@mui/material/Grid2';
+//import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+//importamos las páginas
+// import About from './pages/About';
+// import Contact from './pages/Contact';
+// //import Dashboard from './pages/Dashboard';
+// import Layout from './layout/Layout';
+
+
+
+
 
 const NAVIGATION = [
   {
@@ -13,17 +24,13 @@ const NAVIGATION = [
     title: 'Módulos',
   },
   {
-    segment: 'preguntas',
-    title: 'Preguntas',
-    icon: <ShoppingCartIcon />,
+    segment: 'about',
+    title: 'About por decir nomás',
+    icon: <ShoppingCartIcon />
   },
   {
-    segment: 'examenes',
-    title: 'Exámenes'
-  },
-  {
-    segment: 'miCuenta',
-    title: 'Mi cuenta'
+    segment: 'contact',
+    title: 'Contact, también por decir nomás'
   }
 ];
 
@@ -52,6 +59,7 @@ function useDemoRouter(initialPath) {
     };
   }, [pathname]);
 
+
   return router;
 }
 
@@ -64,57 +72,22 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 
 export default function DashBoard() {
 
-  const router = useDemoRouter('/dashboard');
+  //const router = useDemoRouter('/dashboard');
 
 
   return (
     <AppProvider
       navigation={NAVIGATION}
-      router={router}
       theme={demoTheme}
+      branding={{
+        logo: <img src = "https://res.cloudinary.com/deaubfnet/image/upload/v1729643153/avatars/avatar-1729643153468.jpg"/>,
+        title: "Generador de exámenes"
+      }}
     >
-      <DashboardLayout>
         {/** TODO: Por acá debemos poner el contenido del panel 2 de justinmind y este componete iría en el App.jsx
          * por ahora sirve para construir todos los componentes e irlos probando uno a uno.
          */}
-         <PageContainer>
-          <Grid container spacing={1}>
-            <Grid size={5} />
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={4}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={8}>
-              <Skeleton height={100} />
-            </Grid>
-
-            <Grid size={12}>
-              <Skeleton height={150} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-          </Grid>
-        </PageContainer>
-      </DashboardLayout>
+         <Outlet/>
     </AppProvider>
   );
 }
