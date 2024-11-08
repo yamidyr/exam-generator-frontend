@@ -1,10 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import DashBoard from "../components/layouts/private/DashBoard";
-import Layout from "../components/layouts/private/Layout";
-import { QuestionsModule } from "../components/layouts/private/questionsModule/QuestionsModule";
 import { ExamsModule } from "../components/layouts/private/examsModule/ExamsModule";
 import { ProfileModule } from "../components/layouts/private/profileModule/ProfileModule";
 import { Login } from "../components/layouts/public/Login";
+import { Home } from "../components/layouts/private/Home";
+import { QuestionsFilter } from "../components/layouts/private/questionsModule/QuestionsFilter";
+import { CreateQuestion } from "../components/layouts/private/questionsModule/CreateQuestion";
 
 const router = createBrowserRouter([
     {
@@ -12,32 +13,34 @@ const router = createBrowserRouter([
       Component: DashBoard,
       children:[
         {
-          path: '/dashboard',
-          Component: Layout,
-          children:[
-            {
-              path: '/dashboard/preguntas',
-              Component: QuestionsModule,
-            },
-            {
-              path: '/dashboard/examenes',
-              Component: ExamsModule,
-            },
-            {
-              path: '/dashboard/perfil',
-              Component: ProfileModule
-            }
-          ]
+          path: '',
+          Component: Home,
+        },
+        {
+          path: 'preguntas',
+          Component: QuestionsFilter
+        },
+        {
+          path: 'preguntas/listar-preguntas',
+          Component: QuestionsFilter
+        },
+        {
+          path: 'preguntas/crear-pregunta',
+          Component: CreateQuestion
+        },
+        {
+          path: 'examenes',
+          Component: ExamsModule,
+        },
+        {
+          path: 'perfil',
+          Component: ProfileModule
         }
       ]
     },
     {
-      path: '/',
-      Component: Login,
-      children:[{
-        path:'/login',
-        Component: Login
-      }]
+      path: '/login',
+      Component: Login
     }
   ]);
 

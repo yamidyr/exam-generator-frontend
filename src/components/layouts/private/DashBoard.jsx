@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import QuizIcon from '@mui/icons-material/Quiz';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { DashboardLayout, PageContainer } from '@toolpad/core'
 
 
 
@@ -15,7 +16,17 @@ const NAVIGATION = [
   {
     segment: 'dashboard/preguntas',
     title: 'Módulo de preguntas',
-    icon: <LiveHelpIcon />
+    icon: <LiveHelpIcon />,
+    children: [
+      {
+      segment: 'listar-preguntas',
+      title: 'Preguntas creadas'
+      },
+      {
+        segment: 'crear-pregunta',
+        title: 'Crear pregunta'
+      }
+    ]
   },
   {
     segment: 'dashboard/examenes',
@@ -53,7 +64,11 @@ export default function DashBoard() {
         title: "Generador de exámenes"
       }}
     >
-      <Outlet/>
+      <DashboardLayout>
+        <PageContainer>
+          <Outlet/>
+        </PageContainer>
+      </DashboardLayout>
     </AppProvider>
   );
 }

@@ -25,7 +25,7 @@ export default function QuestionItem({creation_date, user, description, subject,
             image="https://res.cloudinary.com/deaubfnet/image/upload/v1729643153/avatars/avatar-1729643153468.jpg"
             alt="pequeña imagen de la pregunta"
       />
-      <Box sx={{ display: 'flex', flexDirection: 'row', flexGrow:1}}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', flexGrow:1}}> {/* TODO: '&:hover': { bgcolor: 'primary.dark',} to change color when hover */}
         <CardContent sx={{ display: 'flex', flexDirection:'column', flexGrow:1}}>
           <Grid container spacing={0}> {/* Header de la card que muestra la pregunta */}
             <Grid size={3}>

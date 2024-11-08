@@ -11,3 +11,5 @@ export default function Layout() {
     </DashboardLayout>
   )
 }
+
+// TODO: this component is not being used anymore
