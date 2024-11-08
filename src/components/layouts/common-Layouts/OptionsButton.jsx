@@ -3,6 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import PropTypes from 'prop-types';
 
 
 
@@ -55,4 +56,8 @@ export default function OptionsButton({options=[]}) {
       </Menu>
     </div>
   );
+}
+
+OptionsButton.propTypes = {
+  options: PropTypes.object
 }
