@@ -125,7 +125,7 @@ export const GenerateExam = () => {
       <Grid container spacing={2}>
         {/**input para elegir materia */}
         <Grid size = {4}>
-            <FormControl fullWidth>
+            <FormControl>
               <InputLabel id="label-subjects">Materia</InputLabel>
               <Select
                 labelId="label-subjects"
@@ -150,7 +150,7 @@ export const GenerateExam = () => {
         </Grid>
         {/** input para  el grado */}
         <Grid size = {4}>
-          <FormControl fullWidth>
+          <FormControl>
             <InputLabel id="label-terms">Grado</InputLabel>
             <Select
               labelId="label-term"

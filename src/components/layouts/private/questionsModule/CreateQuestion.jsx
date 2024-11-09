@@ -233,7 +233,7 @@ export const CreateQuestion = () => {
         <Grid container spacing={1}>
           {/**input para elegir materia */}
           <Grid size={3}>
-            <FormControl fullWidth>
+            <FormControl>
               <InputLabel id="label-subjects">Materia</InputLabel>
               <Select
                 labelId="label-subjects"
@@ -258,7 +258,7 @@ export const CreateQuestion = () => {
           </Grid>
           {/**input para elegir el tópico */}
           <Grid size={3}>
-            <FormControl fullWidth>
+            <FormControl>
               <InputLabel id="label-topic">Tópico</InputLabel>
               <Select
                 labelId="label-topico"
@@ -281,7 +281,7 @@ export const CreateQuestion = () => {
           </Grid>
           {/** input para grado */}
           <Grid size={3}>
-            <FormControl fullWidth>
+            <FormControl>
               <InputLabel id="label-terms">Grado</InputLabel>
               <Select
                 labelId="label-term"
@@ -303,7 +303,7 @@ export const CreateQuestion = () => {
           </Grid>
           {/** input para la dificultad */}
           <Grid size={3}>
-            <FormControl fullWidth>
+            <FormControl>
               <InputLabel id="label-level">Dificultad</InputLabel>
               <Select
                 labelId="label-level"

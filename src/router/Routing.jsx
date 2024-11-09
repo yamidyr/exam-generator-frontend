@@ -6,7 +6,8 @@ import { QuestionsFilter } from "../components/layouts/private/questionsModule/Q
 import { CreateQuestion } from "../components/layouts/private/questionsModule/CreateQuestion";
 import { ExamsFilter } from "../components/layouts/private/examsModule/ExamsFilter";
 import { GenerateExam } from "../components/layouts/private/examsModule/GenerateExam";
-import { InitPage } from "../components/layouts/public/InitPage";
+import { Login } from "../components/layouts/public/Login";
+import SignUp from "../components/layouts/public/SignUp";
 
 const router = createBrowserRouter([
     {
@@ -45,7 +46,11 @@ const router = createBrowserRouter([
     },
     {
       path: '/',
-      Component: InitPage
+      Component: Login
+    },
+    {
+      path: '/sign-up',
+      Component: SignUp
     }
   ]);
 

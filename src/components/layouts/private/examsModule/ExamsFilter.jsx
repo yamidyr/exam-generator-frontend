@@ -151,7 +151,7 @@ export const ExamsFilter = () => {
                     </Grid>
                     {/** input para grado */}
                     <Grid size={4}>
-                        <FormControl fullWidth>
+                        <FormControl>
                         <InputLabel id="label-terms">Grado</InputLabel>
                             <Select
                             labelId="label-term"
@@ -175,7 +175,7 @@ export const ExamsFilter = () => {
                     </Grid>
                     {/**input para elegir materia */}
                     <Grid size={4}>
-                        <FormControl fullWidth>
+                        <FormControl>
                         <InputLabel id="label-subjects">Materia</InputLabel>
                             <Select
                             labelId="label-subjects"

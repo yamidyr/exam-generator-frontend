@@ -133,8 +133,8 @@ export const QuestionsFilter = () => {
         >
           Filtros
         </AccordionSummary>
+        {/** Ponemos los imputs para setear las variables de estado: */}
         <AccordionDetails>
-            {/** Ponemos los imputs para setear las variables de estado: */}
             <Box>
                 <Grid container spacing={1}>
                     {/** input para fecha desde */}
@@ -151,7 +151,7 @@ export const QuestionsFilter = () => {
                     </Grid>
                     {/** input para grado */}
                     <Grid size={4}>
-                        <FormControl fullWidth>
+                        <FormControl>
                         <InputLabel id="label-terms">Grado</InputLabel>
                             <Select
                             labelId="label-term"
@@ -175,7 +175,7 @@ export const QuestionsFilter = () => {
                     </Grid>
                     {/**input para elegir materia */}
                     <Grid size={4}>
-                        <FormControl fullWidth>
+                        <FormControl>
                         <InputLabel id="label-subjects">Materia</InputLabel>
                             <Select
                             labelId="label-subjects"
@@ -214,6 +214,7 @@ export const QuestionsFilter = () => {
                 </Grid>
             </Box>
         </AccordionDetails>
+        {/** Botón para filtrar */}
         <AccordionActions>
           <Button>Buscar</Button>
         </AccordionActions>
