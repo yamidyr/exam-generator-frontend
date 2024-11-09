@@ -16,7 +16,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 
 
-// Listas y variables de prueba:
+// Listas y variables de prueba: TODO: limpiar después
 const questions = [//TODO: Estas preguntas son traidas desde la base de datos
     {
     creation_date: "11/11/11",
