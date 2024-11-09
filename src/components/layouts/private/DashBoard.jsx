@@ -31,7 +31,17 @@ const NAVIGATION = [
   {
     segment: 'dashboard/examenes',
     title: 'Módulo de exámenes',
-    icon: <QuizIcon />
+    icon: <QuizIcon />,
+    children: [
+      {
+      segment: 'listar-examenes',
+      title: 'Examenes generados'
+      },
+      {
+        segment: 'generar-examen',
+        title: 'Generar examen'
+      }
+    ]
   },
   {
     segment: 'dashboard/perfil',

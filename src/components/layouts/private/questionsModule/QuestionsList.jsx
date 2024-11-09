@@ -20,5 +20,5 @@ export const QuestionsList = ({questions=[]}) => {
 }
 
 QuestionsList.propTypes = {
-    questions: PropTypes.object
+    questions: PropTypes.array
 }

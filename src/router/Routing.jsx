@@ -1,11 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import DashBoard from "../components/layouts/private/DashBoard";
-import { ExamsModule } from "../components/layouts/private/examsModule/ExamsModule";
 import { ProfileModule } from "../components/layouts/private/profileModule/ProfileModule";
 import { Login } from "../components/layouts/public/Login";
 import { Home } from "../components/layouts/private/Home";
 import { QuestionsFilter } from "../components/layouts/private/questionsModule/QuestionsFilter";
 import { CreateQuestion } from "../components/layouts/private/questionsModule/CreateQuestion";
+import { ExamsFilter } from "../components/layouts/private/examsModule/ExamsFilter";
+import { GenerateExam } from "../components/layouts/private/examsModule/GenerateExam";
 
 const router = createBrowserRouter([
     {
@@ -29,8 +30,12 @@ const router = createBrowserRouter([
           Component: CreateQuestion
         },
         {
-          path: 'examenes',
-          Component: ExamsModule,
+          path: 'examenes/listar-examenes',
+          Component: ExamsFilter,
+        },
+        {
+          path: 'examenes/generar-examen',
+          Component: GenerateExam,
         },
         {
           path: 'perfil',

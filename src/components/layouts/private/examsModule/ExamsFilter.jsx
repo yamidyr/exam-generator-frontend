@@ -1,4 +1,4 @@
-import { QuestionsList } from "./QuestionsList"
+import { ExamsList } from "./ExamsList"
 import Accordion from '@mui/material/Accordion';
 import AccordionActions from '@mui/material/AccordionActions';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -17,25 +17,25 @@ import Checkbox from '@mui/material/Checkbox';
 
 
 // Listas y variables de prueba:
-const questions = [//TODO: Estas preguntas son traidas desde la base de datos
+const exams = [//TODO: Estos exámenes son traidos  desde la base de datos
     {
     creation_date: "11/11/11",
     user: "Yamid Yela",
-    description: "Esta es una pregunta para el primer parcial bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla blav", 
+    description: "Este es un examen para el primer parcial bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla blav", 
     subject: "Álgebra Lineal",
     term: "11"
     },
     {
         creation_date: "10/10/10",
         user: "Yamid Yela",
-        description: "Esta es otra pregunta para el primer parcial ",
+        description: "Este es otro examen para el primer parcial ",
         subject: "Álgebra Lineal",
         term: "11"
     },
     {
         creation_date: "12/12/12",
         user: "Yamid Yela",
-        description: "Esta es una tercera bla bla bla bla bla bla bla bla bla bla bla bla blav",
+        description: "Este es un tercer examen bla bla bla bla bla bla bla bla bla bla bla bla blav",
         subject: "Álgebra Lineal",
         term: "11"
     }
@@ -78,7 +78,7 @@ const terms = [ // Esto posiblemente quede hardcodeado
 
 
 //Componete para ser desplegado:
-export const QuestionsFilter = () => {
+export const ExamsFilter = () => {
 
 
     // Se definen las variables de estado para los filtros:
@@ -96,7 +96,7 @@ export const QuestionsFilter = () => {
     const [wordToSearch, setWordToSearch] = useState('');
 
     // variable de estado para casilla de solo mis preguntas
-    const [areOnlyMyQuestions, setAreOnlyMyQuestions] = useState(true);
+    const [areOnlyMyExams, setAreOnlyMyExams] = useState(true);
 
 
     // Se setean las variables de estado de acuerdo a los filtros:
@@ -112,8 +112,8 @@ export const QuestionsFilter = () => {
 
     // Función para el manejo de la variable de estado areOnlyMyQuestion
     const handleAreOnlyMyQuestions = () => {
-        setAreOnlyMyQuestions(!areOnlyMyQuestions);
-        console.log("areOnlyMyQuestions : ", areOnlyMyQuestions);
+        setAreOnlyMyExams(!areOnlyMyExams);
+        console.log("areOnlyMyQuestions : ", areOnlyMyExams);
     }
 
     // Función para manejo del input de busqueda por palabra
@@ -197,11 +197,11 @@ export const QuestionsFilter = () => {
                             </Select>
                         </FormControl>
                     </Grid>
-                    {/** checkbox para mis preguntas */}
+                    {/** checkbox para mis exámenes */}
                     <Grid>
                         <FormControl>
                             <div>
-                                Solo mis preguntas: <Checkbox onChange={handleAreOnlyMyQuestions} size="large" />
+                                Solo mis exámenes: <Checkbox onChange={handleAreOnlyMyQuestions} size="large" />
                             </div>
                         </FormControl>
                     </Grid>
@@ -220,7 +220,8 @@ export const QuestionsFilter = () => {
       </Accordion>
     </div>
     {/** Listamos las preguntas del filtro. Por defecto aparecen todas las preguntas */}
-    <QuestionsList questions = {questions}/>
+    <ExamsList exams = {exams}/>
     </>
   )
 }
+

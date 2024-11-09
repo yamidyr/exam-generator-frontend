@@ -59,5 +59,5 @@ export default function OptionsButton({options=[]}) {
 }
 
 OptionsButton.propTypes = {
-  options: PropTypes.object
+  options: PropTypes.array
 }
