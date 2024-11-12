@@ -14,6 +14,10 @@ import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TransitionGroup } from 'react-transition-group';
 import Stack from '@mui/material/Stack';
+import { useForm } from "../../../../hooks/useForm";
+import { useNavigate } from "react-router-dom";
+import { Global } from "../../../../helpers/Global";
+import Swal from "sweetalert2";
 
 
 //Ejemplo de las frutas para ver si se usa para las posibles respuestas: se busca así: TODO: limpiar fruits
@@ -110,7 +114,6 @@ const topics = [
     name: "Identidades trigonométricas"
   }
 ]
-
 
 
 export const CreateQuestion = () => {
@@ -225,6 +228,68 @@ export const CreateQuestion = () => {
       </Button>
     );
 
+  // Desde aquí código de la profe
+
+  // Usar el hook personalizado useForm para cargar los datos del formulario
+  const { form, changed } = useForm({});
+
+  // Estado para mostrar el resultado del registro del user en la BD
+  const [ saved, setSaved ] = useState("not sended");
+
+  // Hook para redirigir
+  const navigate = useNavigate();
+
+  // Método Guardar un usuario en la BD
+  const saveQuestion= async (e) => {
+
+    // Prevenir que se actualice la pantalla
+    e.preventDefault();
+
+    // Obtener los datos del formulario
+    let newQuestion = form;
+
+            //Imprimimos el newQuestion para ver cómo va
+            console.log("newQuestion: ", JSON.stringify(newQuestion));
+
+    // Petición a la API (Backend) para guardar el usuario en la BD
+    const request = await fetch(Global.url + 'question/create-question', {
+      method: 'POST',
+      body: JSON.stringify(newQuestion),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Obtener la información retornada por el backend
+    const data = await request.json();
+
+    // Verificar si el estado de la respuesta es "created" seteamos la variable de estado saved con "saved"
+    if(request.status === 201 && data.status === "created"){
+      setSaved("saved");
+
+      // Mostrar el modal de éxito
+      Swal.fire({
+        title: data.message,
+        icon: 'success',
+        confirmButtonText: 'Continuar',
+      }).then(() => {
+        // Redirigir después de cerrar el modal
+        navigate('/login');
+      });
+
+    } else {
+      setSaved("error");
+
+      // Mostrar el modal de error
+      Swal.fire({
+        title: data.message || "¡Error en el registro!",
+        icon: 'error',
+        confirmButtonText: 'Intentar nuevamente',
+      });
+    };
+  };
+
+  // Hasta aquí código de la profe
 
   return (
     <>
@@ -238,9 +303,10 @@ export const CreateQuestion = () => {
               <Select
                 labelId="label-subjects"
                 id="label-subjects"
-                value={subject}
+                value={form.name || '-Materia-'}
                 label="subject"
-                onChange={handleSubjectSelector}
+                name = "subjectd"
+                onChange={changed}
               >
                 {/** Desplegamos las materias disponibles guardadas en la base de datos */}
                 {subjects.map((subject) => {
@@ -351,7 +417,7 @@ export const CreateQuestion = () => {
                 <Grid container>
                   <Grid offset="auto">
                     <Stack spacing={2} direction="row">
-                      <Button variant="contained">Crear pregunta</Button>
+                      <Button variant="contained" onClick={saveQuestion}>Crear pregunta</Button>
                     </Stack>
                   </Grid>
                 </Grid>

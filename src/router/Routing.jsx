@@ -8,6 +8,7 @@ import { ExamsFilter } from "../components/layouts/private/examsModule/ExamsFilt
 import { GenerateExam } from "../components/layouts/private/examsModule/GenerateExam";
 import { Login } from "../components/layouts/public/Login";
 import SignUp from "../components/layouts/public/SignUp";
+import { Test } from "../components/layouts/public/Test";
 
 const router = createBrowserRouter([
     {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
     {
       path: '/sign-up',
       Component: SignUp
+    },
+    {
+      path: '/test',
+      Component: Test
     }
   ]);
 
