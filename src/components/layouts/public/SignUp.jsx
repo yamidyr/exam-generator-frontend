@@ -10,40 +10,81 @@ import Button from '@mui/joy/Button';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import { InputLabel, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
+import { Global } from '../../../helpers/Global';
+import { useForm } from '../../../hooks/useForm';
+import { useNavigate } from 'react-router-dom';
 
 // Listas y variables de prueba: TODO: limpiar después
 const subjects = [ // TODO: Esto hay que traerlo de la base de datos
   {
-      nombre: "MATERIAS",
-      displayed_name: "-Materia-"
+    name: "-MATERIAS-",
+    displayed_name: "-Materia-"
   },
   {
-      nombre: "MATEMATICAS",
-      displayed_name: "Matemáticas"
+    name: "MATEMATICAS",
+    displayed_name: "Matemáticas"
   },
   {
-      nombre: "INGLES",
-      displayed_name: "Inglés"
+    name: "INGLES",
+    displayed_name: "Inglés"
   },
   {
-      nombre: "ESPAÑOL",
-      displayed_name: "Español"
+    name: "ESPAÑOL",
+    displayed_name: "Español"
   }
   ]
 
 export default function SignUp() {
 
-    // Se definen las variables de estado para los filtros:
+    // Desde aquí código de la profe
 
-    // variable de estado para las materias
-    const [subject, setSubject] = useState('-Materia-');
+  // Usar el hook personalizado useForm para cargar los datos del formulario
+  const { form, changed } = useForm({});
 
+  // Estado para mostrar el resultado del registro del user en la BD
+  const [ saved, setSaved ] = useState("not sended");
 
-    // Se setean las variables de estado de acuerdo a los inputs:
-    // función para manejo del selector de materias
-    const handleSubjectSelector = (event) => {
-      setSubject(event.target.value);
+  // Hook para redirigir
+  const navigate = useNavigate();
+
+  // Método Guardar un usuario en la BD
+  const saveUser= async (e) => {
+
+    // Prevenir que se actualice la pantalla
+    e.preventDefault();
+
+    // Obtener los datos del formulario
+    let newUser = {
+      name: `${form.name.trim()} ${form.first_lastname.trim()} ${form.second_lastname.trim()}`,
+      id_number:form.id_number,
+      subject_name: form.subject_name,
+      password: form.password
     };
+
+    // Petición a la API (Backend) para guardar el usuario en la BD
+    const request = await fetch(Global.url + 'user/register', {
+      method: 'POST',
+      body: JSON.stringify(newUser),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Obtener la información retornada por el backend
+    const data = await request.json();
+
+    // Verificar si el estado de la respuesta es "created" seteamos la variable de estado saved con "saved"
+    if(request.status === 201 && data.status === "created"){
+      setSaved("saved");
+
+    } else {
+      setSaved("error");
+    };
+  };
+
+  // Hasta aquí código de la profe
+
+
 
   return (
     <>
@@ -70,27 +111,22 @@ export default function SignUp() {
           {/** input para los nombres del usuario */}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Nombres</FormLabel>
-            <Input type="text" />
+            <Input type="text" name="name" value={form.name} onChange={changed}/>
           </FormControl>
           {/** input para el primer apellido */}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Primer apellido</FormLabel>
-            <Input type="text" />
+            <Input type="text" name="first_lastname" value={form.first_lastname} onChange={changed} />
           </FormControl>
           {/** input para el segundo apellido */}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Segundo apellido</FormLabel>
-            <Input type="text" />
+            <Input type="text" name= "second_lastname" value = {form.second_lastname} onChange={changed}/>
           </FormControl>
-          {/** input para el nombre de usuario */}
+          {/** input para el número del documento de identidad */}
           <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>Nombre de usuario</FormLabel>
-            <Input type="text" />
-          </FormControl>
-          {/** input para el correo electrónico del usuario */}
-          <FormControl sx={{ gridColumn: "1/-1" }}>
-            <FormLabel>Correo electrónico</FormLabel>
-            <Input type="text" />
+            <FormLabel>Documento de identidad</FormLabel>
+            <Input type="text" name = "id_number" value={form.id_number} onChange={changed}/>
           </FormControl>
           {/** input para escoger la materia que dicta el profesor */}
           <FormControl>
@@ -98,16 +134,17 @@ export default function SignUp() {
             <Select
               labelId="label-subjects"
               id="label-subjects"
-              value={subject}
+              name = "subject_name"
+              value={form.subject_name || '-MATERIAS-'}
               label="subject"
               size='small'
-              onChange={handleSubjectSelector}
+              onChange={changed}
             >
               {/** Desplegamos las materias disponibles guardadas en la base de datos */}
               {subjects.map((subject) => {
                 return (
-                  <MenuItem value={subject.displayed_name} key={subject.nombre}>
-                    {subject.displayed_name}
+                  <MenuItem value={subject.name} key={subject.name}>
+                    {subject.name}
                   </MenuItem>
                 );
               })}
@@ -116,10 +153,10 @@ export default function SignUp() {
           {/** input para la contraseña del usuario */}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Contraseña</FormLabel>
-            <Input type="password" />
+            <Input type="password" name = "password" value={form.password} onChange={changed}/>
           </FormControl>
           <CardActions sx={{ gridColumn: "1/-1" }}>
-            <Button variant="solid" color="primary">
+            <Button variant="solid" color="primary" onClick={saveUser}>
               Registrar
             </Button>
           </CardActions>
