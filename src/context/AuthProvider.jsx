@@ -11,9 +11,6 @@ export const AuthProvider = ({ children }) => {
   // Estado local para guardar la información del usuario y verificar si está autenticado
   const [auth, setAuth] = useState({});
 
-  // Estado para guardar los contadores
-  const [counters, setCounters] = useState({});
-
   // Estado para configurar la carga de los elementos del perfil y se actualizará al final cuando todo la carga esté lista
   const [loading, setLoading] = useState(true);
 
@@ -39,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       const userId = userObj.id;
 
       // Petición Ajax al backend que compruebe el token y que nos devuelva todos los datos del usuario
-      const request = await fetch(Global.url + "user/profile/" + userId, {
+      const request = await fetch(Global.url + "user/get-user/" + userId, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -59,24 +56,6 @@ export const AuthProvider = ({ children }) => {
       // Asegurar que loading se actualice a false
       setLoading(false);
 
-      // Petición Ajax al backend para los contadores
-      const requestCounters = await fetch(Global.url + "user/counters/" + userId, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": token,
-        },
-      });
-
-      if (!requestCounters.ok) {
-        throw new Error(`Error ${requestCounters.status}: ${requestCounters.statusText}`);
-      }
-
-      const dataCounters = await requestCounters.json();
-
-      // Setear el estado de Counters
-      setCounters(dataCounters);
-
     } catch (error) {
       console.error("Error en autenticación:", error);
     } finally {
@@ -92,8 +71,6 @@ export const AuthProvider = ({ children }) => {
         // Valores que se comparten a través del contexto
         auth,
         setAuth,
-        counters,
-        setCounters,
         loading
       }}
     >
