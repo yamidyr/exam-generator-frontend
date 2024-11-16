@@ -36,7 +36,10 @@ const subjects = [ // TODO: Esto hay que traerlo de la base de datos
 
 export default function SignUp() {
 
-    // Desde aquí código de la profe
+  // Variable para manejar mensajes de error
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Desde aquí código de la profe
 
   // Usar el hook personalizado useForm para cargar los datos del formulario
   const { form, changed } = useForm({});
@@ -53,9 +56,15 @@ export default function SignUp() {
     // Prevenir que se actualice la pantalla
     e.preventDefault();
 
+    // Crear nombre del usuario con los nombres y apellidos
+    let fullName = `${form.name.trim()} ${form.first_lastname.trim()}`;
+    if(form.second_lastname && form.second_lastname.trim()!=""){
+      fullName += ` ${form.second_lastname.trim()}`;
+    }
+
     // Obtener los datos del formulario
     let newUser = {
-      name: `${form.name.trim()} ${form.first_lastname.trim()} ${form.second_lastname.trim()}`,
+      name: fullName,
       id_number:form.id_number,
       subject_name: form.subject_name,
       password: form.password
@@ -79,6 +88,7 @@ export default function SignUp() {
       navigate("/");
     } else {
       setSaved("error");
+      setErrorMessage(data.message);
     };
   };
 
@@ -88,6 +98,21 @@ export default function SignUp() {
 
   return (
     <>
+      {/* Mensajes para el usuario. TODO: Cambiar estilos*/}
+      {saved == "saved" ? (
+            <strong className="alert alert-success">
+              ¡Usuario creado exitosamente!
+            </strong>
+          ) : (
+            ""
+          )}
+      {saved == "error" ? (
+            <strong className="alert alert-success">
+              {errorMessage}
+            </strong>
+          ) : (
+            ""
+          )}
       {/** Formulario para llenar los datos del nuevo usuario */}
       <Card
         variant="outlined"
@@ -111,12 +136,12 @@ export default function SignUp() {
           {/** input para los nombres del usuario */}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Nombres</FormLabel>
-            <Input type="text" name="name" value={form.name} onChange={changed}/>
+            <Input type="text" name="name" value={form.name} onChange={changed} required/>
           </FormControl>
           {/** input para el primer apellido */}
           <FormControl sx={{ gridColumn: "1/-1" }}>
             <FormLabel>Primer apellido</FormLabel>
-            <Input type="text" name="first_lastname" value={form.first_lastname} onChange={changed} />
+            <Input type="text" name="first_lastname" value={form.first_lastname} onChange={changed} required/>
           </FormControl>
           {/** input para el segundo apellido */}
           <FormControl sx={{ gridColumn: "1/-1" }}>
