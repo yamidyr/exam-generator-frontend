@@ -15,7 +15,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { TransitionGroup } from 'react-transition-group';
 import Stack from '@mui/material/Stack';
 import { useForm } from "../../../../hooks/useForm";
-import { useNavigate } from "react-router-dom";
 import { Global } from "../../../../helpers/Global";
 import Swal from "sweetalert2";
 
@@ -53,20 +52,23 @@ function renderItem({ item, handleRemoveFruit }) { //TODO: limpiar fruits
 
 const subjects = [ // TODO: Esto hay que traerlo de la base de datos
   {
-      nombre: "MATERIAS",
+      name: "-Materia-",
       displayed_name: "-Materia-"
   },
   {
-      nombre: "MATEMATICAS",
-      displayed_name: "Matemáticas"
+      name: "MATEMATICAS",
+      displayed_name: "MATEMATICAS",
+      subject_id: '67321b1cf0a19973cf077cc0'
   },
   {
-      nombre: "INGLES",
-      displayed_name: "Inglés"
+      name: "INGLES",
+      displayed_name: "INGLES",
+      subject_id: '67380746cb1d36b5d14e9767'
   },
   {
-      nombre: "ESPAÑOL",
-      displayed_name: "Español"
+      name: "ESPAÑOL",
+      displayed_name: "ESPAÑOL",
+      subject_id: '67380755cb1d36b5d14e976a'
   }
   ]
 
@@ -105,13 +107,16 @@ const topics = [
     name: "-Tópico-"
   },
   {
-    name: "Sistemas de ecuaciones"
+    name: "Sistemas de ecuaciones",
+    id: "67382e9936834944e8b15a4f"
   },
   {
-    name: "Casos de factorización"
+    name: "Casos de factorización",
+    id: "67382ec036834944e8b15a53"
   },
   {
-    name: "Identidades trigonométricas"
+    name: "Identidades trigonométricas",
+    id: "67321b1cf0a19973cf077cc0"
   }
 ]
 
@@ -126,80 +131,6 @@ export const CreateQuestion = () => {
     setTab(newTab);
   };
 
-    // Se definen las variables de estado para obtener los datos de la pregunta que será creada:
-
-    // Variable de estado para la dificultad
-    const [level, setLevel] = useState("2")
-
-    // variable de estado para la materia
-    const [subject, setSubject] = useState('-Materia-');
-
-    // variable de estado para el grado
-    const [term, setTerm] = useState('-Grado-');
-
-    // variable de estado para el tema o tópico
-    const [topic, setTopic] = useState('-Tópico-');
-
-    // variable de estado para el contenido de la pregunta ( abierta o cerrada )
-    const [contentQuestion, setContentQuestion] = useState("");
-
-    // variable de estado para la descripción de la pregunta
-    const [description, setDescription] = useState("");
-
-    // variable de estado para la respuesa a la pregunta abierta
-    const [answerOpenQuestion, setAnswerOpenQuestion] = useState("");
-
-    // variable de estado para la almacenar las posibles respuestas si es una pregunta tipo ICFES
-    const [multOptions, setMultOptions] = useState([]);
-
-
-
-  // Se setean las variables de estado de acuerdo a las entradas con los siguientes métodos:
-
-    // Método para manejo del selector de dificultad
-    const handleLevelSelector = (event) => {
-      setLevel(event.target.value);
-    }
-
-    // función para manejo del selector de materias
-    const handleSubjectSelector = (event) => {
-      setSubject(event.target.value);
-    };
-
-    // Función para el manejo del selector de grados:
-    const handleTermSelector = (event) => {
-        setTerm(event.target.value);
-    }
-
-    // Método para el manejo del selector de tópico
-    const handleTopicSelector = (event) => {
-      setTopic(event.target.value);
-    }
-
-    // Método para el manejo del input en el que se escribe el contenido de la pregunta abierta
-    const handleTextContentQuestion = (event) => { // TODO: hay que ver cómo se guardará el código latex
-      setContentQuestion(event.target.value);
-    }
-
-    // // Método para el manejo del input en el que se escribe el contenido de la pregunta tipo ICFES
-    // const handleTextIcfesQuestion = (event) => { // TODO: hay que ver cómo se guardará el código latex
-    //   setContentQuestion(event.target.value);
-    // }
-
-    // Método para el manejo del input en el que se escribe la descripción de la pregunta
-    const handleTextDescription = (event) => {
-      setDescription(event.target.value);
-    }
-
-    // Método para el manejo del input para la respuesta a la pregunta abierta
-    const handleAnswerOpenQuestion = (event) => {
-      setAnswerOpenQuestion(event.target.value);
-    }
-
-    // Método para el manejo del ingreso de las posibles respuestas si es una pregunta tipo ICFES
-    const handleMultOptions = (event) => {
-      setMultOptions( event.target.value);
-    }
 
 
     // Lo siguiente es un ejemplo para poder hacer las posibles respuestas // TODO: limpiar fruits
@@ -228,16 +159,15 @@ export const CreateQuestion = () => {
       </Button>
     );
 
+
   // Desde aquí código de la profe
 
   // Usar el hook personalizado useForm para cargar los datos del formulario
   const { form, changed } = useForm({});
 
   // Estado para mostrar el resultado del registro del user en la BD
-  const [ saved, setSaved ] = useState("not sended");
+  //const [ saved, setSaved ] = useState("not sended");
 
-  // Hook para redirigir
-  const navigate = useNavigate();
 
   // Método Guardar un usuario en la BD
   const saveQuestion= async (e) => {
@@ -245,17 +175,29 @@ export const CreateQuestion = () => {
     // Prevenir que se actualice la pantalla
     e.preventDefault();
 
-    // Obtener los datos del formulario
-    let newQuestion = form;
+    console.log("data form: " , form)
 
-            //Imprimimos el newQuestion para ver cómo va
-            console.log("newQuestion: ", JSON.stringify(newQuestion));
+    // construimos la pregunta que será enviada en la petición
+    let newQuestion = {
+      type: "abierta",
+      term: form.term,
+      content: form.content,
+      topic_id: topics.filter(t => t.name == form.topic_name)[0].id,
+      subject_id: subjects.filter(s => s.name == form.subject_name)[0].subject_id,
+      description: form.description
+    };
+
+    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI2NzMxN2U1NzU1NWU4MmMzNDgyNGZiNGIiLCJyb2xlIjoiZG9jZW50ZSIsImlhdCI6MTczMTM1NzQzMiwiZXhwIjoxNzMxOTYyMjMyfQ.Q5QP0F1JKFQDurQpcX2yu1ygaU450XgwpDouXipAf4o'
+
+    //Imprimimos el newQuestion para ver cómo va
+    console.log("newQuestion: ", JSON.stringify(newQuestion));
 
     // Petición a la API (Backend) para guardar el usuario en la BD
     const request = await fetch(Global.url + 'question/create-question', {
       method: 'POST',
       body: JSON.stringify(newQuestion),
       headers: {
+        'Authorization': token,
         'Content-Type': 'application/json'
       }
     });
@@ -265,7 +207,7 @@ export const CreateQuestion = () => {
 
     // Verificar si el estado de la respuesta es "created" seteamos la variable de estado saved con "saved"
     if(request.status === 201 && data.status === "created"){
-      setSaved("saved");
+      //setSaved("saved");
 
       // Mostrar el modal de éxito
       Swal.fire({
@@ -273,12 +215,10 @@ export const CreateQuestion = () => {
         icon: 'success',
         confirmButtonText: 'Continuar',
       }).then(() => {
-        // Redirigir después de cerrar el modal
-        navigate('/login');
       });
 
     } else {
-      setSaved("error");
+      //setSaved("error");
 
       // Mostrar el modal de error
       Swal.fire({
@@ -297,25 +237,25 @@ export const CreateQuestion = () => {
       <Box>
         <Grid container spacing={1}>
           {/**input para elegir materia */}
-          <Grid size={3}>
-            <FormControl>
+          <Grid size={6}>
+            <FormControl fullWidth>
               <InputLabel id="label-subjects">Materia</InputLabel>
               <Select
+                name = "subject_name"
                 labelId="label-subjects"
                 id="label-subjects"
-                value={form.name || '-Materia-'}
-                label="subject"
-                name = "subjectd"
+                value={form.subject_name || '-Materia-'}
+                label="subject_name"
                 onChange={changed}
               >
                 {/** Desplegamos las materias disponibles guardadas en la base de datos */}
                 {subjects.map((subject) => {
                   return (
                     <MenuItem
-                      value={subject.displayed_name}
-                      key={subject.nombre}
+                      value={subject.name}
+                      key={subject.name}
                     >
-                      {subject.displayed_name}
+                      {subject.name}
                     </MenuItem>
                   );
                 })}
@@ -323,15 +263,16 @@ export const CreateQuestion = () => {
             </FormControl>
           </Grid>
           {/**input para elegir el tópico */}
-          <Grid size={3}>
-            <FormControl>
+          <Grid size={6}>
+            <FormControl fullWidth>
               <InputLabel id="label-topic">Tópico</InputLabel>
               <Select
+                name= "topic_name"
                 labelId="label-topico"
-                id="label-topico"
-                value={topic}
+                id="topic_name"
+                value={form.topic_name || '-Tópico-'}
                 label="topic"
-                onChange={handleTopicSelector}
+                onChange={changed}
               >
                 {/** Desplegamos los tópicos disponibles en la base de datos */}
                 {topics.map((topic, key) => {
@@ -346,15 +287,16 @@ export const CreateQuestion = () => {
             </FormControl>
           </Grid>
           {/** input para grado */}
-          <Grid size={3}>
-            <FormControl>
+          <Grid size={4}>
+            <FormControl fullWidth>
               <InputLabel id="label-terms">Grado</InputLabel>
               <Select
+                name = "term"
                 labelId="label-term"
                 id="label-term"
-                value={term}
+                value={form.term || "6"}
                 label="term"
-                onChange={handleTermSelector}
+                onChange={changed}
               >
                 {/** Desplegamos los grados disponibles */}
                 {terms.map((term) => {
@@ -368,20 +310,21 @@ export const CreateQuestion = () => {
             </FormControl>
           </Grid>
           {/** input para la dificultad */}
-          <Grid size={3}>
-            <FormControl>
+          <Grid size={4}>
+            <FormControl fullWidth>
               <InputLabel id="label-level">Dificultad</InputLabel>
               <Select
+                name = "difficulty"
                 labelId="label-level"
                 id="label-level"
-                value={level}
+                value={form.difficulty || "Medio"}
                 label="level"
-                onChange={handleLevelSelector}
+                onChange={changed}
               >
                 {/** Desplegamos los niveles disponibles */}
                 {levels.map((level) => {
                   return (
-                    <MenuItem value={level.id} key={level.id}>
+                    <MenuItem value={level.displayedName} key={level.id}>
                       {level.displayedName}
                     </MenuItem>
                   );
@@ -392,13 +335,15 @@ export const CreateQuestion = () => {
           {/** Area de texto para la descripción de la pregunta */}
           <Grid size={12}>
             <TextField
+              name="description"
               fullWidth
               id="question-description"
               label="Breve descripción"
               multiline
               rows={1}
+              value = {form.description}
               defaultValue=""
-              onChange={handleTextDescription}
+              onChange={changed}
             />
           </Grid>
         </Grid>
@@ -430,13 +375,14 @@ export const CreateQuestion = () => {
               {/** Área de texto para el enunciado de la pregunta abierta */}
               <Grid size={12}>
                 <TextField
+                  name = "content"
                   fullWidth
                   id="question-content"
                   label="Contenido de la pregunta"
                   multiline
                   rows={5}
-                  defaultValue=""
-                  onChange={handleTextContentQuestion}
+                  value = {form.content}
+                  onChange={changed}
                 />
               </Grid>
               {/** Área de texto para la respuesta a la pregunta */}
@@ -447,8 +393,7 @@ export const CreateQuestion = () => {
                   label="Respuesta"
                   multiline
                   rows={5}
-                  defaultValue=""
-                  onChange={handleAnswerOpenQuestion}
+                  onChange={changed}
                 />
               </Grid>
             </Grid>
@@ -464,8 +409,7 @@ export const CreateQuestion = () => {
                   label="Enunciado de la pregunta"
                   multiline
                   rows={5}
-                  defaultValue=""
-                  onChange={handleTextContentQuestion}
+                  onChange={changed}
                 />
               </Grid>
               {/** Área de texto para las múltiples opciones a la pregunta de tipo ICFES */}
