@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid2';
 import { useState } from "react";
 import { Global } from "../../../../helpers/Global";
 import axios from "axios";
-import { ClassSharp } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
 // Listas y variables de prueba: TODO: limpiar después
 
@@ -88,31 +88,53 @@ export const GenerateExam = () => {
         })
       }
 
-      // Hacemos la petición para crear el examen
-      const downloadPDF = async () => {
-        const axiosConfig = {
-          responseType: 'arraybuffer',
-          body: JSON.stringify(arrayQuestions),
-          headers:{
-            Accept: 'application/json'
-          }
+      const axiosConfig = {
+        responseType: 'arraybuffer',
+        body: JSON.stringify(arrayQuestions),
+        headers:{
+          Accept: 'application/json'
         }
-        axios.post(Global.url + 'exam/generate-exam', axiosConfig).then((response) => {
-          // esta respuesta contiene el archivo pdf
-          // ahora se descarga
-          const url =  window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'exam.pdf');
-          document.body.appendChild(link);
-          link.click();
-        }).catch((error) => {
-          console.log("error al descargar: ",error.message);
-        })
       }
+      axios.post(Global.url + 'exam/generate-exam', axiosConfig).then((response) => {
+        // Mostrar el modal de éxito
+        Swal.fire({
+          title: response.message,
+          icon: 'success',
+          confirmButtonText: 'Continuar',
+        }).then(() => {
+        });
+      }).catch((error) => {
+        console.log("error al generar el examen: ",error.message);
+        Swal.fire({
+          title: error.message || "¡Error en el registro!",
+          icon: 'error',
+          confirmButtonText: 'Intentar nuevamente',
+        });
+      })
 
-      await downloadPDF();
 
+    }
+
+    // descarga del examen
+    const downloadExam = async () => {
+      const axiosConfig = {
+        responseType: 'arraybuffer',
+        headers:{
+          Accept: 'application/json'
+        }
+      }
+      axios.get(Global.url + 'exam/download-exam', axiosConfig).then((response) => {
+        // esta respuesta contiene el archivo pdf
+        // ahora se descarga
+        const url =  window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'exam.pdf');
+        document.body.appendChild(link);
+        link.click();
+      }).catch((error) => {
+        console.log("error al descargar: ",error.message);
+      })
     }
 
   return (
@@ -242,6 +264,11 @@ export const GenerateExam = () => {
         <Grid offset='auto'>
               <Button variant="contained" onClick={generateExam}>
                 Generar examen
+              </Button>
+        </Grid>
+        <Grid offset='auto'>
+              <Button variant="contained" onClick={downloadExam}>
+                Descargar examen
               </Button>
         </Grid>
       </Grid>
