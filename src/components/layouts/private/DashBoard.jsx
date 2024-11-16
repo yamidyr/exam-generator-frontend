@@ -97,7 +97,7 @@ const authentication = useMemo(() => {
       navigate("/");
     }
   };
-}, []);
+}, [auth.name,auth.role,navigate]);
 
   return (
     <AppProvider

@@ -1,6 +1,7 @@
 import { Box, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import Grid from '@mui/material/Grid2';
 import { useState } from "react";
+import { Global } from "../../../../helpers/Global";
 
 // Listas y variables de prueba: TODO: limpiar después
 
@@ -61,6 +62,32 @@ export const GenerateExam = () => {
         setTerm(event.target.value);
     }
 
+    const generateExam = async () => {
+
+      const faketoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI2NzMxN2U1NzU1NWU4MmMzNDgyNGZiNGIiLCJyb2xlIjoiZG9jZW50ZSIsImlhdCI6MTczMTM1NzQzMiwiZXhwIjoxNzMxOTYyMjMyfQ.Q5QP0F1JKFQDurQpcX2yu1ygaU450XgwpDouXipAf4o'
+
+      // Traemos las preguntas desde la base de datos:
+      const requestQuestions = await fetch(Global.url + "question/get-all-questions/1?&limit=100", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": faketoken
+        },
+      });
+      // Obtener la información retornada por la petición
+      const dataQuestions = await requestQuestions.json();
+      const questionsList = dataQuestions.questions;
+
+      // Hacemos la petición para crear el examen
+      await fetch(Global.url + "exam/generate-exam", {
+        method: "POST",
+        body: JSON.stringify(questionsList),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": faketoken
+        },
+      });
+    }
 
   return (
     <>
@@ -80,7 +107,7 @@ export const GenerateExam = () => {
         <Grid size={2}>
           <FormGroup>
             <InputLabel>
-              Bajo:  
+              Bajo:
             </InputLabel>
           <TextField
             id = "basic-level-questions"
@@ -94,7 +121,7 @@ export const GenerateExam = () => {
         <Grid size={2}>
           <FormGroup>
             <InputLabel>
-              Medio:  
+              Medio:
             </InputLabel>
           <TextField
             id = "mid-level-questions"
@@ -187,7 +214,7 @@ export const GenerateExam = () => {
     <Box>
       <Grid container>
         <Grid offset='auto'>
-              <Button variant="contained">
+              <Button variant="contained" onClick={generateExam}>
                 Generar examen
               </Button>
         </Grid>
