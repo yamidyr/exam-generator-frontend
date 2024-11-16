@@ -2,6 +2,8 @@ import { Box, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, Text
 import Grid from '@mui/material/Grid2';
 import { useState } from "react";
 import { Global } from "../../../../helpers/Global";
+import axios from "axios";
+import { ClassSharp } from "@mui/icons-material";
 
 // Listas y variables de prueba: TODO: limpiar después
 
@@ -78,15 +80,39 @@ export const GenerateExam = () => {
       const dataQuestions = await requestQuestions.json();
       const questionsList = dataQuestions.questions;
 
+      let arrayQuestions = [];
+
+      for(let i=0;i<questionsList.length;i++){
+        arrayQuestions.push({
+          content: questionsList[i].content
+        })
+      }
+
       // Hacemos la petición para crear el examen
-      await fetch(Global.url + "exam/generate-exam", {
-        method: "POST",
-        body: JSON.stringify(questionsList),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": faketoken
-        },
-      });
+      const downloadPDF = async () => {
+        const axiosConfig = {
+          responseType: 'arraybuffer',
+          body: JSON.stringify(arrayQuestions),
+          headers:{
+            Accept: 'application/json'
+          }
+        }
+        axios.post(Global.url + 'exam/generate-exam', axiosConfig).then((response) => {
+          // esta respuesta contiene el archivo pdf
+          // ahora se descarga
+          const url =  window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'exam.pdf');
+          document.body.appendChild(link);
+          link.click();
+        }).catch((error) => {
+          console.log("error al descargar: ",error.message);
+        })
+      }
+
+      await downloadPDF();
+
     }
 
   return (
