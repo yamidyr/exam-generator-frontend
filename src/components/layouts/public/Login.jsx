@@ -27,7 +27,7 @@ const { form, changed, resetForm } = useForm({ id_number: "", password: "" });
 const [logged, setLogged] = useState("not logged");
 
 // Estado para setear los valores del token y usuario en el contexto de la aplicación
-const setAuth = useAuth();
+const { setAuth } = useAuth();
 
 
 const loginUser = async (e) => {
@@ -53,7 +53,7 @@ const loginUser = async (e) => {
     // Guardar los datos del token y usuario en el localstorage del navegador
     localStorage.setItem("token", data.token);
     // Asegurarse de almacenar el usuario en formato JSON
-    localStorage.setItem("user", JSON.stringify(data.userBD)); 
+    localStorage.setItem("user", JSON.stringify(data.userBD));
 
     // Seteamos la variable de estado logged si se autenticó correctamente el usuario
     setLogged("logged");
@@ -68,7 +68,7 @@ const loginUser = async (e) => {
     navigate("/dashboard");
 
     // Forzar una recarga
-    Window.location.reload();
+    //window.location.reload();
 
   } else {
     // Seteamos la variable de estado logged si no se autenticó el usuario

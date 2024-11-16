@@ -76,7 +76,7 @@ export default function SignUp() {
     // Verificar si el estado de la respuesta es "created" seteamos la variable de estado saved con "saved"
     if(request.status === 201 && data.status === "created"){
       setSaved("saved");
-
+      navigate("/");
     } else {
       setSaved("error");
     };

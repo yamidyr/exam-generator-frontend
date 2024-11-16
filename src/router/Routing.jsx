@@ -9,6 +9,7 @@ import { GenerateExam } from "../components/layouts/private/examsModule/Generate
 import { Login } from "../components/layouts/public/Login";
 import SignUp from "../components/layouts/public/SignUp";
 import { Test } from "../components/layouts/public/Test";
+import { AuthProvider } from "../context/AuthProvider";
 
 const router = createBrowserRouter([
     {
@@ -61,6 +62,8 @@ const router = createBrowserRouter([
 
 export const Routing = () => {
   return (
-    <RouterProvider router = {router}/>
+    <AuthProvider>
+      <RouterProvider router = {router}/>
+    </AuthProvider>
   )
 }

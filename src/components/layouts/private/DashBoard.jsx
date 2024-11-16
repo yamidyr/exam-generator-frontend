@@ -1,10 +1,13 @@
-import { extendTheme } from '@mui/material/styles';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { Outlet } from 'react-router-dom';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import QuizIcon from '@mui/icons-material/Quiz';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { DashboardLayout, PageContainer } from '@toolpad/core'
+import { useNavigate } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+import { useEffect, useMemo, useState } from 'react';
+
 
 
 
@@ -50,25 +53,57 @@ const NAVIGATION = [
   }
 ];
 
-const demoTheme = extendTheme({
-  colorSchemes: { light: true, dark: true },
-  colorSchemeSelector: 'class',
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
+
 
 export default function DashBoard() {
+
+  // Navegación:
+const navigate = useNavigate();
+
+// Usamos el hook Auth para tener disponible el objeto del usuario identificado.
+const { auth } = useAuth();
+
+console.log("useauth: " , auth);
+const [session, setSession] = useState({});
+
+useEffect(() => {
+  setSession({
+    user: {
+      name: auth.name,
+      email: auth.role
+    },
+  });
+},[]);
+
+const authentication = useMemo(() => {
+  return {
+    signIn: () => {
+      setSession({
+        user: {
+          name: auth.name,
+          email: auth.role
+        },
+      });
+    },
+    signOut: () => {
+      setSession(null);
+      // Vaciar el local storage
+      localStorage.clear();
+
+      // Setear estados globales a vacío
+      //auth({}); TODO: Revisar el cierre de sesión
+
+      // Navigate (redirección) al login
+      navigate("/");
+    }
+  };
+}, []);
+
   return (
     <AppProvider
+      session = {session}
+      authentication = {authentication}
       navigation={NAVIGATION}
-      theme={demoTheme}
       branding={{
         logo: <img src = "https://res.cloudinary.com/deaubfnet/image/upload/v1729643153/avatars/avatar-1729643153468.jpg"/>,
         title: "Generador de exámenes"
